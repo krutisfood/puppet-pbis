@@ -9,7 +9,6 @@ class pbis (
   $package_prerequired   = $pbis::params::package_prerequired,
   $package_file_suffix   = $pbis::params::package_file_suffix,
   $package_file_provider = $pbis::params::package_file_provider,
-  $package_preexisting   = $pbis::params::package_preexisting,
   $service_name          = $pbis::params::service_name,
   $assume_default_domain = $pbis::params::assume_default_domain,
   $create_home_dir       = $pbis::params::create_home_dir,

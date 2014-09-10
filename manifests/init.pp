@@ -9,6 +9,7 @@ class pbis (
   $package_prerequired   = $pbis::params::package_prerequired,
   $package_file_suffix   = $pbis::params::package_file_suffix,
   $package_file_provider = $pbis::params::package_file_provider,
+  $package_preexisting   = $pbis::params::package_preexisting,
   $service_name          = $pbis::params::service_name,
   $assume_default_domain = $pbis::params::assume_default_domain,
   $create_home_dir       = $pbis::params::create_home_dir,
@@ -25,9 +26,16 @@ class pbis (
   ) inherits pbis::params {
 
   if $use_repository == true {
-    # If the package is on an external repo, install it normally.
+    # If the package is on an external repo, install it normally
+    # Make sure that if installing pbis enterprise where pbis open is already installed, remove open first!
+    if $package == 'pbis-enterprise' {
+      package { 'pbis-open':
+        ensure => absent,
+        before => Package['pbis-enterprise']
+      }
+    }
     package { $package:
-      ensure => latest,
+      ensure  => latest,
     }
   }
   elsif $use_repository == false {

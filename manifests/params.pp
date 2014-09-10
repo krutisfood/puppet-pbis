@@ -9,6 +9,7 @@ class pbis::params {
   # fileserver after pbis v7.1.1 (see bug #3)
   # set this to empty string to disable the preinstallation
   $package_prerequired   = 'pbis-open-upgrade'
+  $package_preexisting   = 'pbis-open'
 
   # domainjoin-cli options
   $ou                    = undef

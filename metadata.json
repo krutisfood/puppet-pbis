@@ -1,7 +1,7 @@
 {
   "author": "Ben Webber",
   "checksums": {
-    "manifests\\init.pp": "064ea4abb8aefc5699f9cab591b72486",
+    "manifests\\init.pp": "b0241ed2e8b6082f801c5bde4982798b",
     "LICENSE": "3c34afdc3adf82d2448f12715a255122",
     "AUTHORS": "452488e2551b04d900d69b57f9152935",
     "templates\\pbis.conf.erb": "09ade9dae7e64618181afb5dbd2530f8",

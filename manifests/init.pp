@@ -31,7 +31,7 @@ class pbis (
       exec { 'leave_domain':
       path    => ['/bin', '/usr/bin', '/opt/pbis/bin'],
       command => "domainjoin-cli leave ${bind_username} '${bind_password}'",
-      onlyif  => "domainjoin-cli query | grep 'Distinguished Name'",
+      onlyif  => "domainjoin-cli query | grep 'Distinguished Name'", #"rpm -qa | grep -c pbis-open", #
       before  => Package['pbis-open'],
       refreshonly => true
       
@@ -40,7 +40,7 @@ class pbis (
       package { 'pbis-open':
         ensure => absent,
         before => Package['pbis-enterprise'],
-        notify => Package['pbis-open']
+        notify => Package['leave_domain']
       }
     }
     package { $package:

@@ -130,9 +130,8 @@ class pbis (
     path    => ['/bin', '/usr/bin', '/opt/pbis/bin'],
     command => "domainjoin-cli join ${options} ${ad_domain} ${bind_username} '${bind_password}'",
     require => Service[$service_name],
-    unless  => 'lsa ad-get-machine account 2> /dev/null | grep "NetBIOS Domain Name"',
-    notify  => Exec['update_DNS']
-  }
+    unless  => 'lsa ad-get-machine account 2> /dev/null | grep "NetBIOS Domain Name"'
+  }  
 
   # Update DNS
   exec { 'update_DNS':
@@ -140,7 +139,8 @@ class pbis (
     command => 'update-dns',
     require => Exec['join_domain'],
     returns => [0, 204],
-    refreshonly => true
+    refreshonly => true,
+    subscribe => Exec['join_domain']
   }
 
   # Configure PBIS

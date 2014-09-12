@@ -28,9 +28,19 @@ class pbis (
     # If the package is on an external repo, install it normally
     # Make sure that if installing pbis enterprise where pbis open is already installed, remove open first!
     if $package == 'pbis-enterprise' {
+      exec { 'leave_domain':
+      path    => ['/bin', '/usr/bin', '/opt/pbis/bin'],
+      command => "domainjoin-cli leave ${bind_username} '${bind_password}'",
+      onlyif  => "domainjoin-cli query | grep 'Distinguished Name'",
+      before  => Package['pbis-open'],
+      refreshonly => true
+      
+      }
+      
       package { 'pbis-open':
         ensure => absent,
-        before => Package['pbis-enterprise']
+        before => Package['pbis-enterprise'],
+        notify => Package['pbis-open']
       }
     }
     package { $package:

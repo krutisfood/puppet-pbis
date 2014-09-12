@@ -171,6 +171,7 @@ class pbis (
   exec { 'set_license_key':
     path      => ['/opt/pbis/bin'],
     command   => "setkey-cli --key ${license_key}",
+    unless  => 'setkey-cli | grep -c key',
     subscribe   => Package['pbis-enterprise'],
     refreshonly => true
   }

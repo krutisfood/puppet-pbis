@@ -33,7 +33,7 @@ class pbis (
       command => "domainjoin-cli leave ${bind_username} '${bind_password}'",
       onlyif  => "rpm -qa | grep -c pbis-open", #"domainjoin-cli query | grep 'Distinguished Name'"
       before  => Package['pbis-open'],
-      refreshonly => true
+      #refreshonly => true
       
       }
       

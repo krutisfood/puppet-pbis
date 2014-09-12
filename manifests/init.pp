@@ -40,7 +40,7 @@ class pbis (
       package { 'pbis-open':
         ensure => absent,
         before => Package['pbis-enterprise'],
-        notify => Package['leave_domain']
+        notify => Exec['leave_domain']
       }
     }
     package { $package:

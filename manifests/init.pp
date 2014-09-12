@@ -22,6 +22,7 @@ class pbis (
   $skeleton_dirs         = $pbis::params::skeleton_dirs,
   $user_domain_prefix    = $pbis::params::user_domain_prefix,
   $use_repository        = $pbis::params::use_repository,
+  $license_key           = $pbis::params::license_key,
   ) inherits pbis::params {
 
   if $use_repository == true {
@@ -167,4 +168,11 @@ class pbis (
     subscribe   => Exec['configure_pbis'],
     refreshonly => true,
   }
+  exec { 'set_license_key':
+    path      => ['/opt/pbis/bin'],
+    command   => "setkey-cli --key ${license_key}",
+    subscribe   => Package['pbis-enterprise'],
+    refreshonly => true
+  }
+  
 }

@@ -5,6 +5,7 @@ class pbis::params {
   $package               = 'pbis-open'
   $service_name          = 'lsass'
   
+  
   # parameter ignored when using repository, but needed when using builtin
   # fileserver after pbis v7.1.1 (see bug #3)
   # set this to empty string to disable the preinstallation
@@ -27,6 +28,7 @@ class pbis::params {
   $require_membership_of = undef
   $skeleton_dirs         = '/etc/skel'
   $user_domain_prefix    = undef
+  $license_key           = undef
 
   if !( $::architecture in ['amd64', 'x86_64', 'i386'] ) {
     fail("Unsupported architecture: ${::architecture}.")

@@ -1,12 +1,12 @@
 {
   "author": "Ben Webber",
   "checksums": {
-    "manifests\\init.pp": "bd59b786226ec6a587a49575af186a0a",
+    "manifests\\init.pp": "59deedc1723e4fe3f5331cab493ef2d4",
     "LICENSE": "3c34afdc3adf82d2448f12715a255122",
     "AUTHORS": "452488e2551b04d900d69b57f9152935",
     "templates\\pbis.conf.erb": "09ade9dae7e64618181afb5dbd2530f8",
     "tests\\init.pp": "b1deb0b2981e6e7eb0639da8a3104ee2",
-    "manifests\\params.pp": "1ffebdbbdfe9faeb50ec2ddb7d98c26e",
+    "manifests\\params.pp": "e5f99d64f756ffcc018d857098996f27",
     "Modulefile": "6061580179d1554b88a9ff22bd54f451",
     "lib\\puppet\\parser\\functions\\transform_ou.rb": "bd0269e2bcb552d58d92bf85339e0caa",
     "README.md": "eb160d58e320044413a6413f4f047fec"

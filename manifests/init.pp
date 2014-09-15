@@ -43,12 +43,12 @@ class pbis (
         before => Package['pbis-enterprise'],
         #notify => Exec['leave_domain']
       }
-      exec { 'set_license_key':
-        path      => ['/opt/pbis/bin'],
-        command   => "setkey-cli --key ${license_key}",
-        unless    => 'setkey-cli | /bin/grep -c key',
-        require   => Package['pbis-enterprise']
-      }
+     # exec { 'set_license_key':
+     #   path      => ['/opt/pbis/bin'],
+     #   command   => "setkey-cli --key ${license_key}",
+     #   unless    => 'setkey-cli | /bin/grep -c key',
+     #   require   => Package['pbis-enterprise']
+     # }
     }
     package { $package:
       ensure  => latest,

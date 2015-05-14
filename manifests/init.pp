@@ -23,21 +23,20 @@ class pbis (
   $user_domain_prefix    = $pbis::params::user_domain_prefix,
   $use_repository        = $pbis::params::use_repository,
   $license_key           = $pbis::params::license_key,
-  ) inherits pbis::params {
+) inherits pbis::params {
 
   if $use_repository == true {
     # If the package is on an external repo, install it normally
     # Make sure that if installing pbis enterprise where pbis open is already installed, remove open first!
     if $package == 'pbis-enterprise' {
       exec { 'leave_domain':
-      path    => ['/bin', '/usr/bin', '/opt/pbis/bin'],
-      command => "domainjoin-cli leave ${bind_username} '${bind_password}'",
-      onlyif  => "rpm -qa | grep -c pbis-open", #"domainjoin-cli query | grep 'Distinguished Name'"
-      before  => Package['pbis-open'],
-      #refreshonly => true
-      
+        path    => ['/bin', '/usr/bin', '/opt/pbis/bin'],
+        command => "domainjoin-cli leave ${bind_username} '${bind_password}'",
+        onlyif  => "rpm -qa | grep -c pbis-open", #"domainjoin-cli query | grep 'Distinguished Name'"
+        before  => Package['pbis-open'],
+        #refreshonly => true
       }
-      
+
       package { 'pbis-open':
         ensure => absent,
         before => Package['pbis-enterprise'],
@@ -49,20 +48,30 @@ class pbis (
      #   unless    => 'setkey-cli | /bin/grep -c key',
      #   require   => Package['pbis-enterprise']
      # }
+      package { $package:
+        ensure  => latest,
+      }
     }
-    package { $package:
-      ensure  => latest,
+    else {
+      # Exclude pbis enterprise for yum as it lists pbis-open as being obsolete & installs enterprise instead.
+      $install_options = $::osfamily ? {
+        'redhat' => ['-x','pbis-enterprise'],
+        default  => []
+      }
+      package { $package:
+        ensure          => latest,
+        install_options => $install_options
+      }
     }
-    
   }
   elsif $use_repository == false {
     # Otherwise, download and install the package from the puppetmaster...
     # a low-performance repo for the poor man
-    
+
     # Compatibilitity switch for pbis <= v7.1.0
     # require also the prerequired package if it is not set to empty string
     if $package_prerequired == "" {
-	  $require_for_package = File["/opt/${package}.${package_file_suffix}"]
+      $require_for_package = File["/opt/${package}.${package_file_suffix}"]
     }
     else {
       $require_for_package = [
@@ -70,7 +79,7 @@ class pbis (
         Package[$package_prerequired]
       ]
     }
-    
+
     file { "/opt/${package}.${package_file_suffix}":
       ensure  => file,
       source  => "puppet:///modules/pbis/${package}.${package_file_suffix}",
@@ -138,7 +147,7 @@ class pbis (
     command => "domainjoin-cli join ${options} ${ad_domain} ${bind_username} '${bind_password}'",
     require => Service[$service_name],
     unless  => 'lsa ad-get-machine account 2> /dev/null | grep "NetBIOS Domain Name"'
-  }  
+  }
 
   # Update DNS
   exec { 'update_DNS':
@@ -177,5 +186,5 @@ class pbis (
     subscribe   => Exec['configure_pbis'],
     refreshonly => true,
   }
-  
+
 }

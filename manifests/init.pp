@@ -159,6 +159,14 @@ class pbis (
     subscribe => Exec['join_domain']
   }
 
+  $cron_interval = fqdn_rand(23)
+  cron { 'update_DNS':
+    command => "/opt/pbis/bin/update-dns",
+    user    => 'root',
+    hour    => $cron_interval,
+    minute  => 0,
+  }
+
   # Configure PBIS
 
   $pbis_conf = '/etc/pbis/pbis.conf'

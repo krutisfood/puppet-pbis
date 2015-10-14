@@ -23,6 +23,7 @@ class pbis (
   $user_domain_prefix    = $pbis::params::user_domain_prefix,
   $use_repository        = $pbis::params::use_repository,
   $license_key           = $pbis::params::license_key,
+  $dns_ipaddress         = $pbis::params::dns_ipaddress,
 ) inherits pbis::params {
 
   if $use_repository == true {
@@ -149,10 +150,17 @@ class pbis (
     unless  => 'lsa ad-get-machine account 2> /dev/null | grep "NetBIOS Domain Name"'
   }
 
+
+  if $dns_ipaddress {
+    $update_dns_options = "--ipaddress ${dns_ipaddress}"
+  } else {
+    $update_dns_options = ''
+  }
+
   # Update DNS
   exec { 'update_DNS':
     path    => ['/opt/pbis/bin'],
-    command => 'update-dns',
+    command => "update-dns ${update_dns_options}",
     require => Exec['join_domain'],
     returns => [0, 204],
     refreshonly => true,
@@ -161,7 +169,7 @@ class pbis (
 
   $cron_interval = fqdn_rand(23)
   cron { 'update_DNS':
-    command => "/opt/pbis/bin/update-dns",
+    command => "/opt/pbis/bin/update-dns ${update_dns_options}",
     user    => 'root',
     hour    => $cron_interval,
     minute  => 0,
